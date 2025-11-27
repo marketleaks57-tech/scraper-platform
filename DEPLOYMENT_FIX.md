@@ -1,11 +1,42 @@
 # Deployment Fix Guide
 
+## Quick Start (TL;DR)
+
+If you just want to get the server running NOW:
+
+```bash
+cd /opt/scraper-platform
+
+# Fix git
+git config pull.rebase true
+git pull origin main
+
+# Create .env file
+chmod +x scripts/create_env.sh
+./scripts/create_env.sh
+
+# Deploy
+sudo docker compose down
+sudo docker compose build --no-cache
+sudo docker compose up -d
+
+# Wait 30 seconds
+sleep 30
+
+# Verify
+curl http://localhost:8000/health
+sudo docker compose ps
+```
+
+---
+
 ## Issues Identified
 
 1. **Git divergent branches** - preventing code pull
 2. **Missing `.env` file** - API requires `DB_URL` and `SCRAPER_SECRET_KEY`
-3. **API health endpoint** - Fixed (now available at both `/health` and `/api/health`)
-4. **Connection reset** - API startup failing due to missing environment variables
+3. **Dockerfile missing scraper-deps** - Build fails because requirements.txt references scraper-deps/requirements.txt
+4. **API health endpoint** - Fixed (now available at both `/health` and `/api/health`)
+5. **Connection reset** - API startup failing due to missing environment variables
 
 ## Step-by-Step Fix
 
