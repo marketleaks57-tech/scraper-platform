@@ -1,0 +1,10 @@
+pipeline:
+  name: sample_source
+  description: Minimal sample scraper pipeline used as a DSL reference.
+  variants:
+    - id: v1_baseline
+    - id: v2_experimental
+  steps:
+    - id: run_sample_pipeline
+      component: sample_source.pipeline
+      params: {}

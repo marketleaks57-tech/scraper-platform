@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+output/
+sessions/cookies/
+sessions/logs/
+frontend-dashboard/node_modules/
+frontend-dashboard/dist/

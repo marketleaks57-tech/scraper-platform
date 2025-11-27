@@ -1,0 +1,14 @@
+{
+  "listing": {
+    "item": ".catalog-product",
+    "name": ".catalog-product__name::text",
+    "price": ".catalog-product__price::text",
+    "url": "a.catalog-product__link::attr(href)"
+  },
+  "details": {
+    "description": "#product-description",
+    "sku": ".product-sku::text",
+    "availability": ".product-availability::text"
+  }
+}
+

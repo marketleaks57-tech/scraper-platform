@@ -1,0 +1,69 @@
+# Example: Alfabeta pipeline with optional LLM steps
+# This shows how to conditionally use LLM based on config
+
+pipeline:
+  name: alfabeta_llm
+  description: Alfabeta scraper with LLM support for PDF table extraction
+  steps:
+    - id: fetch_listings
+      component: alfabeta.pipeline
+      params:
+        env: null
+    
+    # PDF processing (only if mode.pdf_to_table is not "none")
+    - id: fetch_pdfs
+      component: pdf.fetcher
+      condition: "${config.mode.pdf_to_table != 'none'}"
+      params:
+        input_field: pdf_url
+    
+    - id: extract_pdf_text
+      component: pdf.text_extractor
+      condition: "${config.mode.pdf_to_table != 'none'}"
+      params:
+        input_field: pdf_path
+    
+    # LLM table extraction (only if mode.pdf_to_table is "llm" or "hybrid")
+    - id: extract_tables_llm
+      component: pdf.table_llm
+      condition: "${config.mode.pdf_to_table in ['llm', 'hybrid']}"
+      params:
+        source_config: "${config}"
+        table_schema: "${config.table_schema}"
+    
+    # Hybrid mode (try classic first, LLM fallback)
+    - id: extract_tables_hybrid
+      component: hybrid.pdf_hybrid
+      condition: "${config.mode.pdf_to_table == 'hybrid'}"
+      params:
+        source_config: "${config}"
+        table_schema: "${config.table_schema}"
+        quality_threshold: 0.7
+    
+    # LLM normalization (only if llm.normalize_fields is set)
+    - id: normalize_llm
+      component: llm.normalizer
+      condition: "${config.llm.enabled && config.llm.normalize_fields}"
+      params:
+        source_config: "${config}"
+        fields: "${config.llm.normalize_fields}"
+    
+    # LLM QC (only if llm.qc_enabled is true)
+    - id: qc_llm
+      component: qc.llm_qc
+      condition: "${config.llm.enabled && config.llm.qc_enabled}"
+      params:
+        source_config: "${config}"
+        required_fields: "${config.quality.required_fields}"
+    
+    # Standard QC (always runs)
+    - id: qc_standard
+      component: processors.qc_rules
+      params:
+        rules: "${config.quality}"
+    
+    - id: export
+      component: exporters.db_export
+      params:
+        table: "scraper.product_records"
+

@@ -1,0 +1,5 @@
+{
+  "fields": ["pcid", "product_name", "price", "currency", "availability"],
+  "version": "1.0.0"
+}
+

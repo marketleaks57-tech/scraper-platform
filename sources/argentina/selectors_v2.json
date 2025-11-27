@@ -1,0 +1,14 @@
+{
+  "listing": {
+    "item": "article[data-type='product']",
+    "name": "h2 span::text",
+    "price": "span.price-amount::text",
+    "url": "a.product-link::attr(href)"
+  },
+  "details": {
+    "description": "section#details",
+    "sku": "span[data-testid='sku']::text",
+    "availability": "span.badge-availability::text"
+  }
+}
+

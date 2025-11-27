@@ -1,0 +1,26 @@
+components:
+  alfabeta.pipeline:
+    module: src.scrapers.alfabeta.pipeline
+    callable: run_alfabeta
+    type: pipeline
+    description: Full AlfaBeta end-to-end Selenium pipeline.
+  alfabeta.company_index:
+    module: src.scrapers.alfabeta.company_index
+    callable: fetch_company_urls
+    type: scraper
+    description: Retrieve company listing URLs for AlfaBeta.
+  alfabeta.product_index:
+    module: src.scrapers.alfabeta.product_index
+    callable: fetch_product_urls
+    type: scraper
+    description: Retrieve product listing URLs for a company page.
+  alfabeta.product_detail:
+    module: src.scrapers.alfabeta.alfabeta_full_impl
+    callable: extract_product
+    type: scraper
+    description: Extract normalized product detail from an AlfaBeta product page.
+  sample_source.pipeline:
+    module: src.scrapers.template.pipeline
+    callable: run_template
+    type: pipeline
+    description: Minimal example pipeline to demonstrate DSL compilation and execution.

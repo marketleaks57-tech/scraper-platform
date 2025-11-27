@@ -1,0 +1,13 @@
+pipeline:
+  name: alfabeta
+  description: AlfaBeta scraper pipeline compiled through the DSL.
+  variants:
+    - id: v1_baseline
+      description: Default flow tuned for stability.
+    - id: v2_aggressive_pcids
+      description: Uses aggressive product-code matching parameters.
+  steps:
+    - id: run_pipeline
+      component: alfabeta.pipeline
+      params:
+        env: null
